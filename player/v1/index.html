@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetrom Player V1 Documentation & Usage Guide</title>
+
+    <script src="https://api.mahdiyasser.site/player/v1/player.js"></script>
+
+    <meta name="vetrom-checkpoint" points="00:5-good part,00:10-better" target="the-test-video-advanced">
+    
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa; /* Light background */
+            color: #212529;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Smoother shadow */
+        }
+        
+        /* Typography */
+        h1 {
+            color: #007bff;
+            text-align: center;
+            border-bottom: 3px double #007bff;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        h2 {
+            color: #28a745;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            font-weight: 500;
+        }
+        h3 {
+            color: #495057;
+            margin-top: 25px;
+            font-weight: 400;
+        }
+        code {
+            background-color: #e9ecef;
+            color: #c82333; /* Darker red for in-line code */
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+        }
+        pre {
+            background-color: #212529; /* Deep dark background for code blocks */
+            color: #ffffff; /* White text */
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            position: relative;
+        }
+        strong {
+            color: #dc3545; /* Highlight key terms in red */
+        }
+        
+        /* Utility Classes */
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            border-radius: 4px;
+        }
+        .code-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+            gap: 10px;
+        }
+        .code-controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9em;
+        }
+        .code-controls button:hover {
+            background-color: #0056b3;
+        }
+        .code-controls button.copied {
+            background-color: #28a745; /* Green for copied */
+        }
+        .code-section {
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+        .code-section h4 {
+            margin-top: 0;
+            color: #6c757d;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .idiot-proof ol {
+            list-style: none;
+            padding-left: 0;
+        }
+        .idiot-proof ol li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            background-color: #eaf6ff;
+            border-radius: 4px;
+        }
+
+        /* Toggle/Animation Styling */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out; /* Smooth transition */
+            padding: 0 1px; /* Minimal padding when closed */
+        }
+
+        .collapsible-content.active {
+            max-height: 1000px; /* Large enough value to show content */
+            padding: 5px 1px; /* Add padding when open */
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                width: 100%; /* Take full width */
+                padding: 15px;
+                border-radius: 0; /* Optional: remove border-radius on full-width */
+                box-shadow: none; /* Optional: remove shadow on full-width */
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+            .code-controls {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vetrom Player V1 &mdash; The Ultimate MediaPlayer API</h1>
+
+        <div class="note">
+            <p><strong>&#x26A0; Required Setup:</strong> The API script must be included in your <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code> to enable the player functionality:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre id="setup-code">
+&lt;script src="https://api.mahdiyasser.site/player/v1/player.js"&gt;&lt;/script&gt;
+            </pre>
+        </div>
+
+        <hr>
+
+        <h2>1. Standard Use (Basic Player)</h2>
+        <p>For the simplest integration, apply the required class to any <code>&lt;video&gt;</code> element. The Vetrom Player will <strong>automatically initialize</strong>.</p>
+        
+        <h3>Action Required:</h3>
+        <p>Add the class <code>vetrom-media-selected</code> to your <code>&lt;video&gt;</code> tag.</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('standard-code-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'standard-code-block')">Copy Code</button>
+            </div>
+            <div id="standard-code-block" class="collapsible-content active">
+                <h4>Example (Copy-Paste Ready):</h4>
+                <pre>
+&lt;video src="video.mp4" class="vetrom-media-selected"&gt;&lt;/video&gt;
+                </pre>
+            </div>
+        </div>
+        
+        <h3>Video Demo:</h3>
+        <video src="./test.mp4" class="vetrom-media-selected"></video>
+
+        <hr>
+
+        <h2>2. Advanced Use (Adding Chapters/Checkpoints)</h2>
+        <p>To include navigational <strong>chapters</strong> on the video timeline, you must <strong>identify the video</strong> using an ID and <strong>define the checkpoints</strong> in a <code>&lt;meta&gt;</code> tag within the document's <code>&lt;head&gt;</code>.</p>
+
+        <h3>Step A: Set the Video Target</h3>
+        <p>Assign a <strong>unique ID</strong> to your target video element (e.g., <code>id="the-test-video-advanced"</code>).</p>
+
+        <h3>Step B: Define Checkpoints</h3>
+        <p>Add the required <code>&lt;meta&gt;</code> tag inside the <code>&lt;head&gt;</code> of your HTML document.</p>
+        <p>The <strong>Points Format</strong> is: <code>MM:SS-Chapter Name</code>. Separate multiple chapters with a comma (<code>,</code>).</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('advanced-code-block')">Toggle Code</button>
+            </div>
+            <div id="advanced-code-block" class="collapsible-content active">
+                <h4>Complete Example:</h4>
+                
+                <h5>In the &lt;head&gt; (Chapter Definition):</h5>
+                <pre id="advanced-head-code">
+&lt;meta name="vetrom-checkpoint" points="00:5-good part,00:10-better" target="the-test-video-advanced"&gt;
+                </pre>
+                <div class="code-controls" style="margin-top: -10px;"><button onclick="copySpecificCode('advanced-head-code', this)">Copy Meta Tag Code</button></div>
+
+
+                <h5>In the &lt;body&gt; (Video Element):</h5>
+                <pre id="advanced-body-code">
+&lt;video src="test.mp4" class="vetrom-media-selected" id="the-test-video-advanced"&gt;&lt;/video&gt;
+                </pre>
+                <div class="code-controls" style="margin-top: -10px;"><button onclick="copySpecificCode('advanced-body-code', this)">Copy Video Tag Code</button></div>
+            </div>
+        </div>
+        
+        <h3>Video Demo with Chapters:</h3>
+        <video src="./test.mp4" class="vetrom-media-selected" id="the-test-video-advanced"></video>
+
+        <hr>
+
+        <h2>&#x2705; Idiot-Proof How-To Use: 3 Simple Steps</h2>
+        <div class="idiot-proof">
+            <p>Follow these steps to ensure the player works correctly in your HTML file.</p>
+            <ol>
+                <li>
+                    <strong>Copy the Setup Script (Always Required):</strong>
+                    <p>Copy the line below and paste it somewhere within the <code>&lt;head&gt;...&lt;/head&gt;</code> or <code>&lt;body&gt;...&lt;/body&gt;</code> tags of your HTML document. The <code>&lt;head&gt;</code> is usually the best place.</p>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step1-code">
+&lt;script src="https://api.mahdiyasser.site/player/v1/player.js"&gt;&lt;/script&gt;
+                    </pre>
+                </li>
+                <li>
+                    <strong>Add the Class to Your Video (Required for Player):</strong>
+                    <p>Find the <code>&lt;video&gt;</code> tag you want to upgrade and add the class <code>class="vetrom-media-selected"</code> to it. This is what turns a regular video into the Vetrom Player.</p>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step2-code">
+&lt;video src="your-video-file.mp4" <strong>class="vetrom-media-selected"</strong>&gt;&lt;/video&gt;
+                    </pre>
+                </li>
+                <li>
+                    <strong>(Optional) Add Chapters:</strong>
+                    <p>If you want chapters, you need two things:</p>
+                    <ul>
+                        <li><strong>Give your video an ID:</strong> Change your video tag to include a unique ID, like <code>id="my-unique-video"</code>.</li>
+                        <li><strong>Add the Meta Tag:</strong> Paste the chapter definition (the <code>&lt;meta&gt;</code> tag) inside the <code>&lt;head&gt;</code>. Make sure the <code>target="..."</code> attribute matches the ID you just set!</li>
+                    </ul>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step3-code">
+&lt;head&gt;
+    ...
+    <strong>&lt;meta name="vetrom-checkpoint" points="00:15-Intro,01:30-Conclusion" target="my-unique-video"&gt;</strong>
+&lt;/head&gt;
+&lt;body&gt;
+    ...
+    &lt;video src="my-video.mp4" class="vetrom-media-selected" <strong>id="my-unique-video"</strong>&gt;&lt;/video&gt;
+&lt;/body&gt;
+                    </pre>
+                </li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p style="text-align: center; color: #6c757d; font-size: 0.85em;">Vetrom Player V1 &copy; 2025 Mahdi Yasser. Licensed under the MIT License.</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleCode(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('active');
+            }
+        }
+
+        // --- Robust Copy Code Function ---
+        function copySpecificCode(preId, button) {
+            const pre = document.getElementById(preId);
+            if (pre) {
+                performCopy(pre.innerText.trim(), button);
+            } else {
+                 console.error("Could not find specific code block to copy: " + preId);
+            }
+        }
+
+
+        function copyCode(button, containerId = null) {
+            let pre;
+            let container;
+            
+            // 1. Determine the relevant container (closest section or list item)
+            if (containerId) {
+                container = document.getElementById(containerId);
+            } else {
+                container = button.closest('.code-section') || button.closest('.note') || button.closest('li') || button.closest('.container');
+            }
+
+
+            // 2. Determine the PRE element to copy from
+            if (button.closest('.note') && container.querySelector('#setup-code')) {
+                pre = container.querySelector('#setup-code');
+            } else if (button.closest('li') && container.querySelector('pre')) {
+                pre = container.querySelector('pre');
+            } else if (container) {
+                // For the main code sections with toggles (Standard and Advanced)
+                // In these sections, the button's parent is .code-controls, 
+                // and the code is in the next sibling: .collapsible-content
+                const collapsibleContent = button.closest('.code-controls').nextElementSibling;
+                if (collapsibleContent) {
+                    // Try to find the first pre inside the collapsible content
+                    pre = collapsibleContent.querySelector('pre');
+                }
+            }
+
+            if (!pre) {
+                console.error("Could not find code block to copy.");
+                return;
+            }
+
+            performCopy(pre.innerText.trim(), button);
+        }
+
+        function performCopy(codeText, button) {
+            let success = false;
+            const originalText = button.textContent;
+            button.textContent = 'Copying...';
+            
+            // Attempt modern clipboard API (requires HTTPS/secure context)
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(codeText).then(() => {
+                    success = true;
+                    showCopySuccess(button, originalText);
+                }).catch(err => {
+                    console.warn('Modern clipboard copy failed, falling back to document.execCommand:', err);
+                    if (fallbackCopy(codeText)) {
+                        success = true;
+                        showCopySuccess(button, originalText);
+                    } else {
+                        button.textContent = originalText;
+                        alert('Copy failed. Please copy the code manually.');
+                    }
+                });
+            } else {
+                // Fallback for HTTP or older browsers
+                if (fallbackCopy(codeText)) {
+                    success = true;
+                    showCopySuccess(button, originalText);
+                } else {
+                    button.textContent = originalText;
+                    alert('Copy failed. Please copy the code manually.');
+                }
+            }
+        }
+
+        function fallbackCopy(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            tempTextArea.style.position = 'fixed'; 
+            tempTextArea.style.left = '-9999px';
+            document.body.appendChild(tempTextArea);
+            
+            let successful = false;
+            
+            try {
+                tempTextArea.select();
+                document.execCommand('copy');
+                successful = true;
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+            return successful;
+        }
+
+        function showCopySuccess(button, originalText) {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
