@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetrom Gallery V1 Documentation & Usage Guide</title>
+
+    <script src="https://api.mahdiyasser.site/gallery/v1/gallery.js"></script>
+    
+    <script src="https://api.mahdiyasser.site/player/v1/player.js"></script>
+
+    <style>
+        /* Base Styling - Copied and adapted from Vetrom Player Docs */
+         body {
+        overflow-x: hidden;
+       }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa; /* Light background */
+            color: #212529;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Typography */
+        h1 {
+            color: #007bff;
+            text-align: center;
+            border-bottom: 3px double #007bff;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        h2 {
+            color: #28a745;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            font-weight: 500;
+        }
+        h3 {
+            color: #495057;
+            margin-top: 25px;
+            font-weight: 400;
+        }
+        code {
+            background-color: #e9ecef;
+            color: #c82333;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+        }
+        pre {
+            background-color: #212529;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+            position: relative;
+        }
+        strong {
+            color: #dc3545;
+        }
+        
+        /* Utility Classes */
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            border-radius: 4px;
+        }
+        .code-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+            gap: 10px;
+        }
+        .code-controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9em;
+        }
+        .code-controls button:hover {
+            background-color: #0056b3;
+        }
+        .code-controls button.copied {
+            background-color: #28a745;
+        }
+        .code-section {
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+        .code-section h4 {
+            margin-top: 0;
+            color: #6c757d;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .idiot-proof ol {
+            list-style: none;
+            padding-left: 0;
+        }
+        .idiot-proof ol li {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 5px solid #007bff;
+            background-color: #eaf6ff;
+            border-radius: 4px;
+        }
+
+        /* Toggle/Animation Styling */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding: 0 1px;
+        }
+
+        .collapsible-content.active {
+            max-height: 1000px;
+            padding: 5px 1px;
+        }
+
+        /* Mobile Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                width: 100%;
+                padding: 15px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+            .code-controls {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vetrom Gallery V1 &mdash; The Ultimate Media Carousel API</h1>
+
+        <div class="note">
+            <p><strong>&#x26A0; Required Setup:</strong> The API script must be included in your <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code> before you can create any galleries:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre id="setup-code">
+&lt;script src="https://api.mahdiyasser.site/gallery/v1/gallery.js"&gt;&lt;/script&gt;
+            </pre>
+        </div>
+        <div class="note" style="margin-top:-60px">
+            <p><strong>&#x26A0; Required Setup:</strong> The API script must be included in your <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code> before you can create any VetroM player:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre id="setup-code" style="margin-top:-10px">
+&lt;script src="https://api.mahdiyasser.site/player/v1/player.js"&gt;&lt;/script&gt;
+            </pre>
+        </div>
+
+        <hr>
+
+        <h2>1. Standard Use (Basic Gallery)</h2>
+        <p>To convert a group of images and/or videos into a working, swipeable gallery with lightbox functionality, simply wrap them in a <code>&lt;div&gt;</code> with the required class.</p>
+        
+        <h3>Action Required:</h3>
+        <p>Add the class <code>vetrom-gallery</code> to the parent div tag that contains your media.</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('standard-code-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'standard-code-block')">Copy Code</button>
+            </div>
+            <div id="standard-code-block" class="collapsible-content active">
+                <h4>Example 1: Images & Standard Video</h4>
+                <pre>
+&lt;div class="vetrom-gallery"&gt;
+    &lt;img src="./image1.png" alt="Slide 1"&gt;
+    &lt;img src="./image2.png" alt="Slide 2"&gt;
+    &lt;video src="./video.mp4" controls&gt;&lt;/video&gt;
+&lt;/div&gt;
+                </pre>
+            </div>
+        </div>
+        
+        <h3>Live Demo:</h3>
+        <div class="vetrom-gallery">
+            <img src="./image1.png" alt="Slide 1">
+            <img src="./image2.png" alt="Slide 2">
+            <video src="./video.mp4" controls></video>
+        </div>
+
+        <hr>
+
+        <h2>2. Integration with Vetrom Player</h2>
+        <p>You can combine the Gallery with the <strong>Vetrom Player</strong> for a premium video experience inside your carousel. This requires both scripts to be loaded.</p>
+        
+        <p class="note" style="margin-top: 10px; padding: 10px; font-size: 0.9em;">
+            <strong>Note:</strong> Ensure you have also included <code>player.js</code> in your head/body for this to work.
+        </p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('player-code-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'player-code-block')">Copy Code</button>
+            </div>
+            <div id="player-code-block" class="collapsible-content active">
+                <h4>Example 2: Images & Vetrom Player Video</h4>
+                <pre>
+&lt;div class="vetrom-gallery"&gt;
+    &lt;img src="./image3.png" alt="Slide 3"&gt;
+    &lt;img src="./image4.png" alt="Slide 4"&gt;
+    &lt;!-- Video with Vetrom Player Class --&gt;
+    &lt;video src="./video.mp4" class="vetrom-media-selected"&gt;&lt;/video&gt; 
+&lt;/div&gt;
+                </pre>
+            </div>
+        </div>
+
+        <h3>Live Demo (with Vetrom Player):</h3>
+        <div class="vetrom-gallery">
+            <img src="./image3.png" alt="Slide 3">
+            <img src="./image4.png" alt="Slide 4">
+            <video src="./video.mp4" class="vetrom-media-selected"></video>
+        </div>
+
+        <hr>
+
+        <h2>3. Standalone Vetrom Player</h2>
+        <p>You can also use the <strong>Vetrom Player</strong> independently, without the gallery carousel. This is useful for single featured videos on a page.</p>
+        <p class="note" style="margin-top: 10px; padding: 10px; font-size: 0.9em;">
+            <strong>Note:</strong> Ensure you have also included <code>player.js</code> in your head/body for this to work.
+        </p>
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('standalone-player-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'standalone-player-block')">Copy Code</button>
+            </div>
+            <div id="standalone-player-block" class="collapsible-content active">
+                <h4>Example 3: Standalone Player</h4>
+                <pre>
+&lt;!-- Standalone Player Wrapper --&gt;
+    &lt;video src="./video.mp4" class="vetrom-media-selected"&gt;&lt;/video&gt;
+                </pre>
+            </div>
+        </div>
+        
+        <h3>Live Demo:</h3>
+            <video src="./video.mp4" class="vetrom-media-selected"></video>
+        <hr>
+
+        <h2>4. Advanced Use (Multiple Galleries)</h2>
+        <p>If you need multiple independent galleries on the same page, you can optionally append a unique number after the class name (e.g., <code>:1</code>, <code>:2</code>).</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('advanced-code-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'advanced-code-block')">Copy Code</button>
+            </div>
+            <div id="advanced-code-block" class="collapsible-content active">
+                <h4>Example: Multiple Unique IDs</h4>
+                <pre>
+&lt;!-- Gallery #1 --&gt;
+&lt;div class="vetrom-gallery:1"&gt;
+    &lt;img src="./image5.png"&gt;
+&lt;/div&gt;
+
+&lt;!-- Gallery #2 --&gt;
+&lt;div class="vetrom-gallery:2"&gt;
+    &lt;img src="./image6.png"&gt;
+&lt;/div&gt;
+                </pre>
+            </div>
+        </div>
+        
+        <h3>Live Demos:</h3>
+        
+        <h4>Gallery ID: 1</h4>
+        <div class="vetrom-gallery:1">
+            <img src="./image5.png" alt="Slide 5">
+        </div>
+
+        <h4 style="margin-top:20px;">Gallery ID: 2</h4>
+        <div class="vetrom-gallery:2">
+            <img src="./image6.png" alt="Slide 6">
+        </div>
+
+        <hr>
+
+        <h2>5. Theme Customization</h2>
+        <p>The gallery automatically adapts to your website's background color. However, you can enforce a specific color scheme using CSS variables.</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('theme-code-block')">Toggle Code</button>
+                <button onclick="copyCode(this, 'theme-code-block')">Copy Code</button>
+            </div>
+            <div id="theme-code-block" class="collapsible-content">
+                <h4>CSS Example:</h4>
+                <pre>
+:root {
+    /* Gallery background color (slides) */
+    --vetrom-bg: #222222; 
+    
+    /* Text/Icon color for controls */
+    --vetrom-text: #ffffff; 
+    
+    /* Background color for controls (buttons) */
+    --vetrom-accent: rgba(255, 255, 255, 0.4); 
+}
+                </pre>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>&#x2705; Idiot-Proof How-To Use: 3 Simple Steps</h2>
+        <div class="idiot-proof">
+            <p>Follow these steps to ensure the gallery works correctly in your HTML file.</p>
+            <ol>
+                <li>
+                    <strong>Copy the Setup Script (Always Required):</strong>
+                    <p>Copy the line below and paste it somewhere within the <code>&lt;head&gt;...&lt;/head&gt;</code> or <code>&lt;body&gt;...&lt;/body&gt;</code> tags of your HTML document.</p>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step1-code">
+&lt;script src="https://api.mahdiyasser.site/gallery/v1/gallery.js"&gt;&lt;/script&gt;
+                    </pre>
+                </li>
+                <li>
+                    <strong>Create the Container Div:</strong>
+                    <p>Create a <code>&lt;div&gt;</code> element where you want your gallery to appear and give it the specific class name.</p>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step2-code">
+&lt;div <strong>class="vetrom-gallery"</strong>&gt;
+    ...
+&lt;/div&gt;
+                    </pre>
+                </li>
+                <li>
+                    <strong>Add Your Media:</strong>
+                    <p>Simply paste your <code>&lt;img&gt;</code> or <code>&lt;video&gt;</code> tags inside that div. The script will handle the rest!</p>
+                    <div class="code-controls"><button onclick="copyCode(this)">Copy Code</button></div>
+                    <pre id="idiot-step3-code">
+&lt;div class="vetrom-gallery"&gt;
+    <strong>&lt;img src="image.jpg"&gt;</strong>
+    <strong>&lt;img src="photo.png"&gt;</strong>
+    <strong>&lt;video src="movie.mp4"&gt;&lt;/video&gt;</strong>
+&lt;/div&gt;
+                    </pre>
+                </li>
+            </ol>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p style="text-align: center; color: #6c757d; font-size: 0.85em;">Vetrom Gallery V1 &copy; 2025 Mahdi Yasser. Licensed under the MIT License.</p>
+        </footer>
+    </div>
+
+    <script src="https://api.mahdiyasser.site/gallery/v1/gallery.js"></script>
+    
+    <script src="https://api.mahdiyasser.site/player/v1/player.js"></script>
+
+    <script>
+        function toggleCode(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('active');
+            }
+        }
+
+        function copyCode(button, containerId = null) {
+            let pre;
+            let container;
+            
+            // Determine the relevant container
+            if (containerId) {
+                container = document.getElementById(containerId);
+            } else {
+                container = button.closest('.code-section') || button.closest('.note') || button.closest('li') || button.closest('.container');
+            }
+
+            // Determine the PRE element to copy from
+            if (button.closest('.note') && container.querySelector('#setup-code')) {
+                pre = container.querySelector('#setup-code');
+            } else if (button.closest('li') && container.querySelector('pre')) {
+                pre = container.querySelector('pre');
+            } else if (container) {
+                // For main code sections with toggles
+                const collapsibleContent = button.closest('.code-controls').nextElementSibling;
+                if (collapsibleContent) {
+                    pre = collapsibleContent.querySelector('pre');
+                }
+            }
+
+            if (!pre) {
+                console.error("Could not find code block to copy.");
+                return;
+            }
+
+            performCopy(pre.innerText.trim(), button);
+        }
+
+        function performCopy(codeText, button) {
+            const originalText = button.textContent;
+            button.textContent = 'Copying...';
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(codeText).then(() => {
+                    showCopySuccess(button, originalText);
+                }).catch(err => {
+                    console.warn('Clipboard copy failed, using fallback', err);
+                    if (fallbackCopy(codeText)) {
+                        showCopySuccess(button, originalText);
+                    } else {
+                        button.textContent = originalText;
+                        alert('Copy failed. Please copy manually.');
+                    }
+                });
+            } else {
+                if (fallbackCopy(codeText)) {
+                    showCopySuccess(button, originalText);
+                } else {
+                    button.textContent = originalText;
+                    alert('Copy failed. Please copy manually.');
+                }
+            }
+        }
+
+        function fallbackCopy(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            tempTextArea.style.position = 'fixed'; 
+            tempTextArea.style.left = '-9999px';
+            document.body.appendChild(tempTextArea);
+            
+            let successful = false;
+            try {
+                tempTextArea.select();
+                document.execCommand('copy');
+                successful = true;
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+            return successful;
+        }
+
+        function showCopySuccess(button, originalText) {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
