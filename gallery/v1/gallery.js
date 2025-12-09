@@ -625,33 +625,31 @@ const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 22L20
         }
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // New function to wrap the initialization logic
+    function initVetromGalleries() {
+        galleries.length = 0; 
+
         const regex = /^vetrom-gallery(:(\d+))?$/; 
         
-        function tryInitGallery() {
-            const initialGalleryCount = galleries.length;
+        document.querySelectorAll('div').forEach((div) => {
+            const classList = Array.from(div.classList);
+            const match = classList.find(cls => regex.test(cls));
             
-            document.querySelectorAll('div').forEach((div) => {
-                const classList = Array.from(div.classList);
-                const match = classList.find(cls => regex.test(cls));
-                
-                if (match) {
-                    // Check if this div is an original gallery div that hasn't been replaced yet
-                    // The original initGallery logic replaces the div with the container
-                    // We only want to process the original tags here.
-                    // A simple check is to see if it hasn't been processed already
-                    // by looking for the required class and ensuring it's not the final container class.
-                    if (!div.classList.contains('vetrom-gallery-container')) {
-                        initGallery(div, galleries.length); 
-                    }
+            if (match) {
+                if (div.classList.contains('vetrom-gallery-container')) {
+                    return; 
                 }
-            });
-
-            // If no new galleries were initialized, retry after 500ms
-            if (galleries.length === initialGalleryCount) {
-                 setTimeout(tryInitGallery, 500);
+                initGallery(div, galleries.length); 
             }
-        }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
         
-        tryInitGallery();
+        initVetromGalleries(); 
+        
+        setTimeout(() => {
+            initVetromGalleries();
+        }, 500);
     });
+})();
