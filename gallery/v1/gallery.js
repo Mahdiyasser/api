@@ -636,5 +636,17 @@ const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 22L20
                 initGallery(div, galleries.length); 
             }
         });
+
+        // ADDED : Simple re-initialization after 500ms for dynamic content
+        setTimeout(() => {
+            document.querySelectorAll('div').forEach((div) => {
+                const classList = Array.from(div.classList);
+                const match = classList.find(cls => regex.test(cls));
+                
+                if (match && !div.classList.contains('vetrom-gallery-container')) {
+                    initGallery(div, galleries.length); 
+                }
+            });
+        }, 500);
     });
 })();
