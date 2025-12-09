@@ -933,7 +933,7 @@ if (isTouchDevice) {
 
   } // end class
 
-  // initialize
+    // initialize
   function init(){
     document.querySelectorAll('video.vetrom-media-selected').forEach(v=>{
       if(v.__vetromPlayer) return;
@@ -941,7 +941,22 @@ if (isTouchDevice) {
     });
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  // Helper to run initialization
+  function runInit() {
+    init();
+
+    // If no players were found on the first run, try again in 500ms
+    // to catch dynamically loaded videos from script.js
+    if (document.querySelectorAll('video.vetrom-media-selected').length === 0) {
+      setTimeout(init, 500); 
+    }
+  }
+
+  // Use DOMContentLoaded for the first attempt as before
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runInit);
+  } else {
+    runInit();
+  }
 
 })();
-
