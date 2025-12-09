@@ -625,31 +625,16 @@ const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 22L20
         }
     });
 
-    // New function to wrap the initialization logic
-    function initVetromGalleries() {
-        galleries.length = 0; 
-
+    document.addEventListener('DOMContentLoaded', () => {
         const regex = /^vetrom-gallery(:(\d+))?$/; 
         
-        document.querySelectorAll('div').forEach((div) => {
+        document.querySelectorAll('div').forEach((div, index) => {
             const classList = Array.from(div.classList);
             const match = classList.find(cls => regex.test(cls));
             
             if (match) {
-                if (div.classList.contains('vetrom-gallery-container')) {
-                    return; 
-                }
                 initGallery(div, galleries.length); 
             }
         });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        
-        initVetromGalleries(); 
-        
-        setTimeout(() => {
-            initVetromGalleries();
-        }, 500);
     });
 })();
