@@ -628,13 +628,30 @@ const SVG_NEXT = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 22L20
     document.addEventListener('DOMContentLoaded', () => {
         const regex = /^vetrom-gallery(:(\d+))?$/; 
         
-        document.querySelectorAll('div').forEach((div, index) => {
-            const classList = Array.from(div.classList);
-            const match = classList.find(cls => regex.test(cls));
+        function tryInitGallery() {
+            const initialGalleryCount = galleries.length;
             
-            if (match) {
-                initGallery(div, galleries.length); 
+            document.querySelectorAll('div').forEach((div) => {
+                const classList = Array.from(div.classList);
+                const match = classList.find(cls => regex.test(cls));
+                
+                if (match) {
+                    // Check if this div is an original gallery div that hasn't been replaced yet
+                    // The original initGallery logic replaces the div with the container
+                    // We only want to process the original tags here.
+                    // A simple check is to see if it hasn't been processed already
+                    // by looking for the required class and ensuring it's not the final container class.
+                    if (!div.classList.contains('vetrom-gallery-container')) {
+                        initGallery(div, galleries.length); 
+                    }
+                }
+            });
+
+            // If no new galleries were initialized, retry after 500ms
+            if (galleries.length === initialGalleryCount) {
+                 setTimeout(tryInitGallery, 500);
             }
-        });
+        }
+        
+        tryInitGallery();
     });
-})();
