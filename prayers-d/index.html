@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prayer Times API</title>
+</head>
+<body>
+    <div id="output">Loading clean data...</div>
+
+    <script>
+        // 1. The Callback Function: This is what the "messy" ?(data) will execute
+        window.processPrayerData = function(data) {
+            if (data && data.items && data.items.length > 0) {
+                const item = data.items[0];
+                
+                // 2. Clean up the response to only what you need
+                const cleanResponse = {
+                    city: data.city,
+                    date: item.date_for,
+                    fajr: item.fajr,
+                    dhuhr: item.dhuhr,
+                    asr: item.asr,
+                    maghrib: item.maghrib,
+                    isha: item.isha
+                };
+
+                // 3. Send clean JSON to the screen
+                document.getElementById('output').innerHTML = `<pre>${JSON.stringify(cleanResponse, null, 4)}</pre>`;
+            } else {
+                document.getElementById('output').innerText = "Error: Invalid data received.";
+            }
+        };
+
+        // 4. Fetching via Script Tag (JSONP) to avoid CORS
+        function fetchData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const city = urlParams.get('city') || 'damanhour';
+            
+            // We replace 'jsoncallback=?' with our function name 'jsoncallback=processPrayerData'
+            const apiUrl = `https://muslimsalat.com/${city}/daily.json?key=sa&jsoncallback=processPrayerData`;
+
+            const script = document.createElement('script');
+            script.src = apiUrl;
+            
+            // Error handling for the script load
+            script.onerror = () => {
+                document.getElementById('output').innerText = "Failed to load the API.";
+            };
+
+            document.body.appendChild(script);
+        }
+
+        // Run on load
+        fetchData();
+    </script>
+</body>
+</html>
