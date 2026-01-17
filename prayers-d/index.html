@@ -5,6 +5,45 @@
     <title>Prayer Times API</title>
 </head>
 <body>
+<!--
+How To Use
+
+simply use this url
+
+https://api.mahdiyasser.site/prayers-d/?city=cairo,egypt
+
+and change the ?city=cairo,egypt to ?city={yourcity},{yourcountry} so it looks like this as another example
+
+https://api.mahdiyasser.site/prayers-d/?city=london,england
+
+and you can also for some cities not add a country and it will work like this
+
+https://api.mahdiyasser.site/prayers-d/?city=newyork
+
+this is also just a simplifier api to this api
+
+https://muslimsalat.com/{your-city}/daily.json?key=API_KEY&jsoncallback=processPrayerData
+
+i made this wraper to simplfy the output of the api so it looks like this
+
+{
+    "city": "New York",
+    "date": "2026-1-17",
+    "fajr": "5:57 am",
+    "dhuhr": "12:06 pm",
+    "asr": "2:35 pm",
+    "maghrib": "5:00 pm",
+    "isha": "6:15 pm"
+}
+
+instead of this 
+
+processPrayerData({"title":"","query":"newyork","for":"daily","method":4,"prayer_method_name":"Islamic Circle of North America","daylight":"0","timezone":"-5","map_image":"https:\/\/maps.google.com\/maps\/api\/staticmap?center=40.723274,-74.007017&sensor=false&zoom=13&size=300x300","sealevel":"5","today_weather":{"pressure":"","temperature":"0.6"},"link":"http:\/\/muslimsalat.com\/newyork","qibla_direction":"58.51","latitude":"40.723274","longitude":"-74.007017","address":"","city":"New York","state":"NY","postal_code":"","country":"USA","country_code":"US","items":[{"date_for":"2026-1-17","fajr":"5:57 am","shurooq":"7:11 am","dhuhr":"12:06 pm","asr":"2:35 pm","maghrib":"5:00 pm","isha":"6:15 pm"}],"status_valid":1,"status_code":1,"status_description":"Success."});
+
+but i actually use the orignal api in my website https://salaty.mahdiyasser.site
+
+
+-->
     <div id="output">Loading clean data...</div>
 
     <script>
