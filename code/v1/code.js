@@ -108,20 +108,26 @@
         .vetrom-copy-btn:hover { background: #000; transform: translateY(-2px); border-color: rgba(255,255,255,0.3); }
     `;
 
-    // Inject CSS
+    // Inject CSS immediately so styles are ready
     const style = document.createElement('style');
     style.textContent = CSS;
     document.head.appendChild(style);
 
-    /* ---------- Engine Logic (Preserved) ---------- */
+    /* ---------- Engine Logic ---------- */
 
     function getSafeColor(colorStr) {
         const temp = document.createElement("div");
         // Replace _ with # for hex, otherwise use text name/rgb/rgba directly
         temp.style.color = colorStr.replace(/_/g, '#');
+        // We must append to body to get computed style, but we need body to exist
+        // If body doesn't exist yet (very rare if called from init), return defaults
+        if(!document.body) return { bg: '#1e293b', text: '#f8fafc' };
+
         document.body.appendChild(temp);
-        const rgb = window.getComputedStyle(temp).color.match(/\d+/g).map(Number);
+        const rgbStyle = window.getComputedStyle(temp).color;
         document.body.removeChild(temp);
+        
+        const rgb = rgbStyle.match(/\d+/g) ? rgbStyle.match(/\d+/g).map(Number) : [0,0,0];
         
         // HSP perceived brightness for text contrast
         const hsp = Math.sqrt(0.299*(rgb[0]**2) + 0.587*(rgb[1]**2) + 0.114*(rgb[2]**2));
@@ -183,14 +189,27 @@
         el.setAttribute('data-vetrom-applied', 'true');
     }
 
-    // Initialize & Watch for dynamic content
-    const observer = new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => {
-        if (n.nodeType === 1) {
-            if (n.classList.contains('vetrom-codeblock')) transform(n);
-            n.querySelectorAll('.vetrom-codeblock').forEach(transform);
-        }
-    })));
+    // --- Initialization & Observer ---
+    function initEngine() {
+        // Safe check: ensure body exists
+        if (!document.body) return;
 
-    observer.observe(document.body, { childList: true, subtree: true });
-    document.querySelectorAll('.vetrom-codeblock').forEach(transform);
+        const observer = new MutationObserver(m => m.forEach(r => r.addedNodes.forEach(n => {
+            if (n.nodeType === 1) {
+                if (n.classList.contains('vetrom-codeblock')) transform(n);
+                n.querySelectorAll('.vetrom-codeblock').forEach(transform);
+            }
+        })));
+
+        observer.observe(document.body, { childList: true, subtree: true });
+        document.querySelectorAll('.vetrom-codeblock').forEach(transform);
+    }
+
+    // Fix for "parameter 1 is not of type 'Node'"
+    // Wait for DOMContentLoaded so document.body exists
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initEngine);
+    } else {
+        initEngine();
+    }
 })();
