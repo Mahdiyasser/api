@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetrom Code Engine V1 - Documentation</title>
+
+    <script src="https://api.mahdiyasser.site/code/v1/code.js"></script>
+
+    <style>
+        /* --- General Page Layout (Documentation Styling) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Typography */
+        h1 { color: #2d3436; text-align: center; border-bottom: 2px solid #dfe6e9; padding-bottom: 20px; margin-bottom: 40px; font-weight: 300; }
+        h2 { color: #0984e3; border-bottom: 1px solid #e9ecef; padding-bottom: 10px; margin-top: 50px; font-weight: 600; }
+        h3 { color: #636e72; margin-top: 30px; font-size: 1.2rem; }
+        p { margin-bottom: 15px; }
+
+        /* Utility */
+        code.inline {
+            background-color: #e9ecef;
+            color: #d63031;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            border-radius: 4px;
+        }
+
+        /* --- GENERATOR UI STYLING --- */
+        .generator-ui {
+            background: #fff;
+            border: 1px solid #dfe6e9;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+        }
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .control-grid label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #2d3436;
+        }
+        .control-grid input[type="text"], 
+        .control-grid select,
+        .control-grid textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #b2bec3;
+            border-radius: 6px;
+            font-family: inherit;
+            box-sizing: border-box; 
+        }
+        .control-grid textarea {
+            font-family: 'Consolas', monospace;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* Color Picker Wrapper */
+        .color-input-wrapper {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        input[type="color"] {
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            background: none;
+        }
+
+        /* Generator Buttons */
+        .btn {
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .btn:hover { background-color: #74b9ff; }
+
+        /* Output Area */
+        .output-area {
+            margin-top: 30px;
+            display: none; /* Hidden by default */
+            border-top: 2px dashed #dfe6e9;
+            padding-top: 20px;
+        }
+        .output-label {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #b2bec3;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        .generated-code-box {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .copy-output-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .copy-output-btn:hover { background: rgba(255,255,255,0.4); }
+
+/* --- Fix: Professional Code Formatting in the 'Copy' Box --- */
+#final-html-code {
+    display: block;
+    white-space: pre; /* Essential: Preserves \n and indentation */
+    padding: 15px;
+    font-family: 'Consolas', monospace;
+    overflow-x: auto; /* Adds scrollbar if code is too wide */
+}
+
+/* --- Mobile & Tablet Fixes --- */
+
+/* Tablets (Portrait & Landscape) */
+@media screen and (max-width: 1024px) {
+    .container {
+        max-width: 95%;
+        padding: 20px;
+    }
+    .control-grid {
+        grid-template-columns: 1fr 1fr; /* 2 columns for tablet */
+    }
+}
+
+/* Mobile Devices */
+@media screen and (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 15px;
+        border-radius: 0; /* Full-bleed on small screens */
+    }
+    h1 {
+        font-size: 1.6rem;
+    }
+    /* Stacks generator controls in 1 column for phone users */
+    .control-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px;
+    }
+    .btn {
+        padding: 16px; /* Larger touch target */
+        font-size: 1.1rem;
+    }
+    /* Ensure the preview doesn't overflow the screen */
+    .vetrom-codeblock {
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    /* Make the Copy button visible on mobile (since no hover exists) */
+    .vetrom-copy-btn {
+        opacity: 1 !important;
+        padding: 6px 12px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Vetrom Code Engine V1</h1>
+
+    <div class="note">
+        <strong>&#x26A0; Installation:</strong> Add this script to your document head or body to enable the engine.
+        <br><br>
+        <code class="inline">&lt;script src="https://api.mahdiyasser.site/code/v1/code.js"&gt;&lt;/script&gt;</code>
+    </div>
+
+    <h2>&#x2699; Block Generator & Live Preview</h2>
+    <p>Design your code block here. The preview will update instantly using the API logic.</p>
+    
+    <div class="generator-ui">
+        <div class="control-grid">
+            <div>
+                <label>Base Background</label>
+                <div class="color-input-wrapper">
+                    <input type="text" id="g-bg" value="#2d3436" onchange="syncColor(this, 'g-bg-picker')">
+                    <input type="color" id="g-bg-picker" value="#2d3436" oninput="syncColor(this, 'g-bg')">
+                </div>
+            </div>
+
+            <div>
+                <label>Hover Background</label>
+                <div class="color-input-wrapper">
+                    <input type="text" id="g-hbg" value="#00cec9" onchange="syncColor(this, 'g-hbg-picker')">
+                    <input type="color" id="g-hbg-picker" value="#00cec9" oninput="syncColor(this, 'g-hbg')">
+                </div>
+            </div>
+
+            <div>
+                <label>Copy Button Style</label>
+                <select id="g-copy">
+                    <option value="copy">Always Visible</option>
+                    <option value="hovercopy">Visible on Hover</option>
+                    <option value="">Disabled (None)</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Hover Effect</label>
+                <select id="g-hover">
+                    <option value="hover">Enabled (Change Color)</option>
+                    <option value="">Disabled (Static)</option>
+                </select>
+            </div>
+
+            <div style="grid-column: 1 / -1;">
+                <label>Your Code Content</label>
+                <textarea id="g-content" placeholder="Paste your code here...">console.log("Vetrom Engine Loaded!");</textarea>
+            </div>
+        </div>
+
+        <button class="btn" onclick="generateBlock()">Create BLOCK</button>
+
+        <div id="output-container" class="output-area">
+            
+            <span class="output-label">1. Copy this HTML Code</span>
+            <div class="generated-code-box">
+                <button class="copy-output-btn" onclick="copyGeneratedCode(this)">COPY</button>
+                <code id="final-html-code"></code>
+            </div>
+
+            <span class="output-label">2. Live Preview (Rendered by API)</span>
+            <div id="live-preview-box">
+                </div>
+
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>&#128214; How It Works</h2>
+    
+    <h3>1. The Structure</h3>
+    <p>The engine works by styling a wrapper <code>div</code>. Inside, you must have a standard <code>&lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;</code> structure.</p>
+    <div class="vetrom-codeblock" id="_2d3436-copy">
+<pre><code>&lt;div class="vetrom-codeblock" id="YOUR_CONFIG_HERE"&gt;
+    &lt;pre&gt;&lt;code&gt; 
+        console.log("Your code goes here"); 
+    &lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <h3>2. The ID Configuration System</h3>
+    <p>Everything is controlled via the <code>id="..."</code> attribute. You combine colors and keywords, separated by dashes (<code>-</code>).</p>
+
+    <div class="idiot-proof">
+        <h4>Key Rules:</h4>
+        <ul>
+            <li><strong>Hex Colors:</strong> Must use an underscore (<code>_</code>) instead of hash (<code>#</code>). Example: <code>_ff0000</code> means #ff0000.</li>
+            <li><strong>Color Names:</strong> You can use standard names like <code>red</code>, <code>blue</code>, <code>black</code>.</li>
+            <li><strong>Order:</strong> The API automatically detects which part is a color and which is a keyword.
+                <ul>
+                    <li>1st Color Found = <strong>Main Background</strong></li>
+                    <li>2nd Color Found = <strong>Hover Background</strong></li>
+                </ul>
+            </li>
+            <li><strong>Best Practice:</strong> This is how your id should look like.
+                <ul>
+                    <li>SCHEMA: <strong>[main_color]-[copy/hovercopy]-[hover]-[hover_color]</strong></li>
+                    <li>EXAMPLE FULL:  <strong>id="_1e293b-hovercopy-hover-blue"</strong></li>
+                    <li>EXAMPLE REGULAR:  <strong>id="white-copy"</strong></li>
+                    <li>EXAMPLE MINIMAL:  <strong>id="white"</strong></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <h3>3. Keywords</h3>
+    <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+        <tr style="background:#e9ecef; text-align:left;">
+            <th style="padding:10px; border:1px solid #dfe6e9;">Keyword</th>
+            <th style="padding:10px; border:1px solid #dfe6e9;">Function</th>
+        </tr>
+        <tr>
+            <td style="padding:10px; border:1px solid #dfe6e9;"><code>copy</code></td>
+            <td style="padding:10px; border:1px solid #dfe6e9;">Adds a permanent "COPY" button to the top right.</td>
+        </tr>
+        <tr>
+            <td style="padding:10px; border:1px solid #dfe6e9;"><code>hovercopy</code></td>
+            <td style="padding:10px; border:1px solid #dfe6e9;">Adds a "COPY" button that only appears when mouse is over the block.</td>
+        </tr>
+        <tr>
+            <td style="padding:10px; border:1px solid #dfe6e9;"><code>hover</code></td>
+            <td style="padding:10px; border:1px solid #dfe6e9;">Enables the transition to the second color.</td>
+        </tr>
+    </table>
+
+    <h2>&#128161; Examples</h2>
+
+    <h3>Example A: Simple Dark Theme</h3>
+    <p>ID: <code>_000000</code> (Black background, auto-white text)</p>
+    <div class="vetrom-codeblock" id="_000000">
+<pre><code>// Just a simple black box
+print("Hello Void");</code></pre>
+    </div>
+
+    <h3>Example B: Interactive (Hover + Copy)</h3>
+    <p>ID: <code>_6c5ce7-hovercopy-hover-_0984e3</code></p>
+    <p><em>(Purple background. Changes to Blue on hover. Copy button appears on hover.)</em></p>
+    <div class="vetrom-codeblock" id="_6c5ce7-hovercopy-hover-_0984e3">
+<pre><code>function interactive() {
+    return "Hover over me!";
+}</code></pre>
+    </div>
+
+    <h3>Example C: Minimalist "Ghost" Dark</h3>
+    <p>ID: <code>_121212-copy</code> (Deep dark grey background with a permanent copy button)</p>
+    <div class="vetrom-codeblock" id="_121212-copy">
+    <pre><code>// Ghost Dark Theme
+    const theme = "minimalist";
+    console.log("Sleek and professional.");</code></pre>
+    </div>
+
+    <h3>Example D: The "Traffic Light" (Warning to Success)</h3>
+    <p>ID: <code>_d63031-hover-_00b894-copy</code></p>
+    <p><em>(Red background. Changes to Green on hover. Copy button always visible.)</em></p>
+    <div class="vetrom-codeblock" id="_d63031-hover-_00b894-copy">
+    <pre><code>// Hover to change status
+    function checkStatus() {
+        return "From Error (Red) to Success (Green)";
+    }</code></pre>
+    </div>
+
+    <h3>Example E: Interactive "Neon Glow"</h3>
+    <p>ID: <code>black-hover-yellow-hovercopy</code></p>
+    <p><em>(Black background. Changes to Yellow on hover. Copy button appears on hover.)</em></p>
+    <div class="vetrom-codeblock" id="black-hover-yellow-hovercopy">
+    <pre><code>/* Neon Glow Style */
+    .neon {
+        color: #fff;
+        text-shadow: 0 0 5px #fff;
+    }</code></pre>
+    </div>
+
+    <h3>Example F: Classic Terminal</h3>
+    <p>ID: <code>black-hover-green</code> (Standard CSS color names, black to green on hover, no copy button)</p>
+    <div class="vetrom-codeblock" id="black-hover-green">
+    <pre><code>$ npm install vetrom-engine
+    $ starting engine...
+    $ success!</code></pre>
+    </div>
+
+    <h3>Example G: Midnight Ocean</h3>
+    <p>ID: <code>_1e293b-copy</code> (Slate blue background with a permanent copy button)</p>
+    <div class="vetrom-codeblock" id="_1e293b-copy">
+    <pre><code>// Midnight Ocean Theme
+    const ocean = "deep blue";
+    console.log("Steady and readable.");</code></pre>
+    </div>
+
+    <h3>Example H: The "Solarized" Alert</h3>
+    <p>ID: <code>_fdf6e3-hover-_d33682-copy</code></p>
+    <p><em>(Cream background. Changes to Magenta on hover. Copy button always visible.)</em></p>
+    <div class="vetrom-codeblock" id="_fdf6e3-hover-_d33682-copy">
+    <pre><code># Solarized Alert
+    def warning():
+        print("Attention Required!")</code></pre>
+    </div>
+
+    <h3>Example I: Cyberpunk Stealth</h3>
+    <p>ID: <code>_000000-hovercopy-hover-cyan</code></p>
+    <p><em>(Black background. Changes to Cyan on hover. Copy button appears on hover.)</em></p>
+    <div class="vetrom-codeblock" id="_000000-hovercopy-hover-cyan">
+    <pre><code>{
+      "engine": "Vetrom V1",
+      "status": "Infiltrating..."
+    }</code></pre>
+    </div>
+
+    <h3>Example J: Forest Minimal</h3>
+    <p>ID: <code>darkgreen-hover-lime</code> (Standard color names, green to lime on hover, no copy button)</p>
+    <div class="vetrom-codeblock" id="darkgreen-hover-lime">
+    <pre><code>/* Forest Theme */
+    body {
+        background: #006400;
+    }</code></pre>
+    </div>
+
+    <footer>
+        <p style="text-align: center; color: #b2bec3; font-size: 0.85em; margin-top: 50px;">
+            Vetrom Code Engine V1 &copy; 2025 Mahdi Yasser.
+        </p>
+    </footer>
+</div>
+
+<script>
+    // Syncs Color Picker <-> Text Input
+    function syncColor(source, targetId) {
+        const target = document.getElementById(targetId);
+        target.value = source.value;
+    }
+
+    function generateBlock() {
+        // 1. Gather values
+        let bg = document.getElementById('g-bg').value.trim();
+        let hbg = document.getElementById('g-hbg').value.trim();
+        const copyMode = document.getElementById('g-copy').value;
+        const hoverMode = document.getElementById('g-hover').value;
+        let content = document.getElementById('g-content').value;
+
+        // 2. Format Colors (Replace # with _)
+        bg = bg.replace(/#/g, '_');
+        hbg = hbg.replace(/#/g, '_');
+
+        // 3. Construct ID parts
+        let idParts = [];
+        
+        // Add Main Color
+        idParts.push(bg);
+
+        // Add Copy Mode (if selected)
+        if (copyMode) idParts.push(copyMode);
+
+        // Add Hover Mode (if enabled)
+        if (hoverMode === 'hover') {
+            idParts.push('hover');
+            idParts.push(hbg); // Hover color is only needed if hover is enabled
+        }
+
+        const finalID = idParts.join('-');
+
+        // 4. Escape HTML content for display inside <pre>
+        // This prevents the code from executing if the user types <div>
+        const escapedContent = content
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+        // 5. Build the Raw HTML String
+        const rawHTML = `<div class="vetrom-codeblock" id="${finalID}">\n<pre><code>${escapedContent}</code></pre>\n</div>`;
+
+        // 6. Display Output
+        document.getElementById('output-container').style.display = 'block';
+        
+        // Show the code string
+        document.getElementById('final-html-code').textContent = rawHTML;
+
+        // Render the Preview
+        // Note: We inject the RAW HTML. The Vetrom API (MutationObserver) will detect this injection and style it automatically.
+        const previewBox = document.getElementById('live-preview-box');
+        previewBox.innerHTML = ""; // Clear previous
+        
+        // Create a temporary container to inject cleanly
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = rawHTML;
+        
+        // Append the child to preview
+        previewBox.appendChild(tempDiv.firstElementChild);
+    }
+
+    function copyGeneratedCode(btn) {
+        const codeText = document.getElementById('final-html-code').textContent;
+        navigator.clipboard.writeText(codeText).then(() => {
+            const original = btn.textContent;
+            btn.textContent = "COPIED!";
+            setTimeout(() => btn.textContent = original, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
