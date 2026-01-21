@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetrom Player V2 Documentation & Usage Guide</title>
+
+    <script src="https://api.mahdiyasser.site/player/v2/player.js"></script>
+    
+    <style>
+        body {
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #212529;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            border-bottom: 4px double #764ba2;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #764ba2;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+            margin-top: 50px;
+            font-weight: 500;
+        }
+        h3 {
+            color: #495057;
+            margin-top: 30px;
+            font-weight: 400;
+        }
+        h4 {
+            color: #6c757d;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        code {
+            background-color: #f8f9fa;
+            color: #e83e8c;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            position: relative;
+            border-left: 4px solid #667eea;
+        }
+        strong {
+            color: #764ba2;
+        }
+        
+        .note {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin: 25px 0;
+            color: #856404;
+            border-radius: 8px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            padding: 20px;
+            margin: 25px 0;
+            color: #155724;
+            border-radius: 8px;
+        }
+        
+        .code-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+            gap: 10px;
+        }
+        .code-controls button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .code-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .code-controls button.copied {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        
+        .example-section {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+        .example-section h4 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-card h4 {
+            margin-top: 0;
+            color: #764ba2;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+        .toc h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .toc li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .toc a {
+            color: #764ba2;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .toc a:hover {
+            color: #667eea;
+        }
+
+        footer {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0px;
+            }
+            .container {
+                padding: 0px;
+                border-radius: 10px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Vetrom Player V2 — The Ultimate MediaPlayer API</h1>
+
+        <div class="note">
+            <p><strong>⚡ Required Setup:</strong> Add this script to your <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code>:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;script src="https://api.mahdiyasser.site/player/v2/player.js"&gt;&lt;/script&gt;</pre>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#basic">1. Basic Usage</a></li>
+                <li><a href="#themes">2. Theme Customization</a></li>
+                <li><a href="#chapters">3. Chapters (Time Markers)</a></li>
+                <li><a href="#secure">4. Secure Mode (Copyright Protection)</a></li>
+                <li><a href="#quality">5. Multiple Quality Sources</a></li>
+                <li><a href="#subtitles">6. Subtitles/Captions</a></li>
+                <li><a href="#complete">7. Complete Examples</a></li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <h2 id="basic">1. Basic Usage</h2>
+        <p>Simply add the class <code>vetrom-media</code> to any <code>&lt;video&gt;</code> element. This uses the default theme (baby blue, white, and gold).</p>
+        
+        <div class="example-section">
+            <h4>Example: Basic Player</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video src="video.mp4" class="vetrom-media"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" class="vetrom-media"></video>
+        </div>
+
+        <hr>
+
+        <h2 id="themes">2. Theme Customization</h2>
+        <p>Customize the player's appearance with themes and colors. Format: <code>vetrom-media-{theme}-{color}</code></p>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h4>🌙 Dark Themes</h4>
+                <p>Perfect for dark backgrounds</p>
+                <code>vetrom-media-dark</code>
+            </div>
+            <div class="feature-card">
+                <h4>☀️ Light Themes</h4>
+                <p>Clean and bright</p>
+                <code>vetrom-media-light</code>
+            </div>
+            <div class="feature-card">
+                <h4>🎨 Auto Themes</h4>
+                <p>Adapts to background</p>
+                <code>vetrom-media-auto</code>
+            </div>
+        </div>
+
+        <h3>Available Colors:</h3>
+        <p><strong>Named colors:</strong> red, blue, green, purple, orange, yellow, pink, cyan, gray</p>
+        <p><strong>Custom colors:</strong> hex (#ff5733), rgb (rgb(255,87,51)), rgba (rgba(255,87,51,0.8))</p>
+
+        <div class="example-section">
+            <h4>Example: Dark Red Theme</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video src="video.mp4" class="vetrom-media-dark-red"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" class="vetrom-media-dark-brown"></video>
+        </div>
+
+        <div class="example-section">
+            <h4>Example: Light Blue Theme</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video src="video.mp4" class="vetrom-media-light-blue"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" class="vetrom-media-light-blue"></video>
+        </div>
+
+        <div class="example-section">
+            <h4>Example: Custom Hex Color</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video src="video.mp4" class="vetrom-media-auto-#ff6b6b"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" class="vetrom-media-auto-#ff6b6b"></video>
+        </div>
+
+        <hr>
+
+        <h2 id="chapters">3. Chapters (Time Markers)</h2>
+        <p>Add navigational chapters using the video's <code>id</code> attribute.</p>
+        <p><strong>Format:</strong> <code>Chapter Name,HH:MM:SS-Chapter Name,HH:MM:SS-...</code></p>
+        
+        <div class="warning">
+            <strong>⚠️ Important:</strong> Time format must be HH:MM:SS (hours:minutes:seconds). Use 00:00:05 for 5 seconds, not 00:05.
+        </div>
+
+        <div class="example-section">
+            <h4>Example: Player with Chapters</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video 
+  src="video.mp4" 
+  class="vetrom-media-dark-purple"
+  id="Introduction,00:00:00-Main Content,00:00:10-Conclusion,00:00:20"&gt;
+&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video 
+                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" 
+                class="vetrom-media-dark-purple"
+                id="Opening,00:00:00-Action Scene,00:00:05-Finale,00:00:15">
+            </video>
+        </div>
+
+        <hr>
+
+        <h2 id="secure">4. Secure Mode (Copyright Protection)</h2>
+        <p>Enable secure mode to show a custom context menu on right-click/long-press. Add <code>secure</code> to the class name.</p>
+
+        <div class="example-section">
+            <h4>Example: Secure Player</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video src="video.mp4" class="vetrom-media-secure-dark-red"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo (Try right-clicking):</h4>
+            <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4" class="vetrom-media-secure-dark-orange"></video>
+        </div>
+
+        <hr>
+
+        <h2 id="quality">5. Multiple Quality Sources</h2>
+        <p>Provide multiple quality options using standard HTML5 <code>&lt;source&gt;</code> elements with <code>label</code> and <code>res</code> attributes.</p>
+
+        <div class="example-section">
+            <h4>Example: Multi-Quality Player</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video class="vetrom-media-dark-cyan"&gt;
+  &lt;source src="video-1080p.mp4" type="video/mp4" label="1080p" res="1080"&gt;
+  &lt;source src="video-720p.mp4" type="video/mp4" label="720p" res="720"&gt;
+  &lt;source src="video-480p.mp4" type="video/mp4" label="480p" res="480"&gt;
+&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video class="vetrom-media-dark-cyan">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4" label="HD" res="720">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4" type="video/mp4" label="SD" res="480">
+            </video>
+        </div>
+
+        <hr>
+
+        <h2 id="subtitles">6. Subtitles/Captions</h2>
+        <p>Add subtitles using standard HTML5 <code>&lt;track&gt;</code> elements. Add <code>default</code> attribute to enable automatically.</p>
+
+        <div class="example-section">
+            <h4>Example: Player with Subtitles</h4>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video class="vetrom-media-light-green"&gt;
+  &lt;source src="video.mp4" type="video/mp4"&gt;
+  &lt;track kind="subtitles" src="subs_en.vtt" srclang="en" label="English" default&gt;
+  &lt;track kind="subtitles" src="subs_es.vtt" srclang="es" label="Español"&gt;
+  &lt;track kind="subtitles" src="subs_fr.vtt" srclang="fr" label="Français"&gt;
+&lt;/video&gt;</pre>
+            
+            <div class="note">
+                <strong>💡 Tip:</strong> You need to provide your own .vtt subtitle files. The player will show them in the settings menu.
+            </div>
+        </div>
+
+        <hr>
+
+        <h2 id="complete">7. Complete Examples</h2>
+
+        <h3>Example 1: All Features Combined</h3>
+        <div class="example-section">
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video 
+  class="vetrom-media-1-secure-dark-red"
+  id="Intro,00:00:00-Middle,00:00:08-End,00:00:15"&gt;
+  &lt;source src="video-1080p.mp4" type="video/mp4" label="1080p" res="1080"&gt;
+  &lt;source src="video-720p.mp4" type="video/mp4" label="720p" res="720"&gt;
+  &lt;source src="video-480p.mp4" type="video/mp4" label="480p" res="480"&gt;
+  &lt;track kind="subtitles" src="subs_en.vtt" srclang="en" label="English" default&gt;
+  &lt;track kind="subtitles" src="subs_es.vtt" srclang="es" label="Español"&gt;
+&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video 
+                class="vetrom-media-1-secure-dark-red"
+                id="Opening Scene,00:00:00-Main Action,00:00:10-Credits,00:00:25">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" type="video/mp4" label="HD" res="720">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" type="video/mp4" label="SD" res="480">
+                <track kind="subtitles" src="subs_en.vtt" srclang="en" label="English" default>
+                <track kind="subtitles" src="subs_es.vtt" srclang="es" label="Español">
+            </video>
+        </div>
+
+        <h3>Example 2: Instance Numbers for Multiple Players</h3>
+        <div class="example-section">
+            <p>Use instance numbers to style multiple players differently on the same page:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;video class="vetrom-media-1-dark-blue" src="video1.mp4"&gt;&lt;/video&gt;
+&lt;video class="vetrom-media-2-light-green" src="video2.mp4"&gt;&lt;/video&gt;
+&lt;video class="vetrom-media-3-auto-purple" src="video3.mp4"&gt;&lt;/video&gt;</pre>
+            
+            <h4>Live Demo:</h4>
+            <video class="vetrom-media-1-dark-blue" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"></video>
+            <video class="vetrom-media-2-light-green" src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4"></video>
+        </div>
+
+        <h3>Quick Reference: All Class Name Patterns</h3>
+        <div class="success">
+            <ul>
+                <li><code>vetrom-media</code> — Default theme</li>
+                <li><code>vetrom-media-dark</code> — Dark theme, default color</li>
+                <li><code>vetrom-media-light</code> — Light theme, default color</li>
+                <li><code>vetrom-media-auto</code> — Auto-adapting theme</li>
+                <li><code>vetrom-media-dark-red</code> — Dark red theme</li>
+                <li><code>vetrom-media-light-#ff5733</code> — Light theme with custom hex color</li>
+                <li><code>vetrom-media-secure</code> — Secure mode enabled</li>
+                <li><code>vetrom-media-secure-dark-blue</code> — Secure + dark blue</li>
+                <li><code>vetrom-media-1-dark-red</code> — Instance #1, dark red</li>
+                <li><code>vetrom-media-2-secure-light-green</code> — Instance #2, secure, light green</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p><strong>Vetrom Player V2</strong> © 2026 Mahdi Yasser</p>
+            <p>Licensed under the MIT License</p>
+            <p>Created with ❤️ for the web</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const pre = button.closest('.code-controls').nextElementSibling || 
+                        button.closest('.note').querySelector('pre') ||
+                        button.closest('.example-section').querySelector('pre');
+            
+            if (!pre) {
+                console.error('Could not find code block to copy');
+                return;
+            }
+
+            const code = pre.textContent.trim();
+            const originalText = button.textContent;
+            
+            button.textContent = 'Copying...';
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(() => {
+                    button.textContent = '✓ Copied!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.warn('Clipboard copy failed:', err);
+                    fallbackCopy(code, button, originalText);
+                });
+            } else {
+                fallbackCopy(code, button, originalText);
+            }
+        }
+
+        function fallbackCopy(text, button, originalText) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            
+            try {
+                textarea.select();
+                document.execCommand('copy');
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+                button.textContent = originalText;
+                alert('Copy failed. Please copy the code manually.');
+            }
+            
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
