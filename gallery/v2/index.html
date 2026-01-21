@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vetrom Gallery V2 Documentation & Usage Guide</title>
+
+    <script src="https://api.mahdiyasser.site/gallery/v2/gallery.js"></script>
+    <script src="https://api.mahdiyasser.site/player/v2/player.js"></script>
+
+    <style>
+        body {
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #212529;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+        
+        h1 {
+            color: #007bff;
+            text-align: center;
+            border-bottom: 3px double #007bff;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        h2 {
+            color: #28a745;
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            font-weight: 500;
+        }
+        h3 {
+            color: #495057;
+            margin-top: 25px;
+            font-weight: 400;
+        }
+        code {
+            background-color: #e9ecef;
+            color: #c82333;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95em;
+        }
+        pre {
+            background-color: #212529;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        strong {
+            color: #dc3545;
+        }
+        
+        .note {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            color: #721c24;
+            border-radius: 4px;
+        }
+        .code-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 5px;
+            gap: 10px;
+        }
+        .code-controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9em;
+        }
+        .code-controls button:hover {
+            background-color: #0056b3;
+        }
+        .code-controls button.copied {
+            background-color: #28a745;
+        }
+        .code-section {
+            border: 1px solid #e9ecef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+        }
+        .code-section h4 {
+            margin-top: 0;
+            color: #6c757d;
+            font-size: 1em;
+            font-weight: 600;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding: 0 1px;
+        }
+        .collapsible-content.active {
+            max-height: 3000px;
+            padding: 5px 1px;
+        }
+        .theme-demo {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+        .rtl-demo {
+            direction: rtl;
+            background-color: #e7f3ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                width: 100%;
+                padding: 15px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+        }
+
+/* NUCLEAR OVERFLOW PREVENTION */
+*, *::before, *::after {
+    box-sizing: border-box !important; /* Prevents padding from adding to width */
+}
+
+html, body {
+    max-width: 100vw !important;
+    overflow-x: hidden !important; /* Hard kill for horizontal scrollbars */
+    margin: 0;
+    padding: 0;
+}
+
+/* Force code blocks and pre tags to wrap or scroll internally */
+pre, code {
+    white-space: pre-wrap !important;       /* CSS3 */
+    white-wrap: break-word !important;      /* Internet Explorer 5.5+ */
+    word-break: break-all !important;       /* Strict break for long strings */
+    overflow-x: auto !important;            /* Fallback scroll if wrap fails */
+    max-width: 100% !important;             /* Keep it inside the parent */
+    display: block;                         /* Ensures it behaves as a box */
+}
+
+/* The "Last Resort" container fix */
+.container {
+    width: 100% !important;
+    max-width: 1000px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    overflow-wrap: break-word !important;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vetrom Gallery V2 — The Ultimate Media Carousel API</h1>
+        <p style="text-align: center; color: #6c757d;">✨ <strong>New in V2:</strong> Full video lightbox support, advanced theming, RTL support, and real-time DOM watching!</p>
+
+        <div class="note">
+            <p><strong>⚠ Required Setup:</strong> Include the API script in your <code>&lt;head&gt;</code> or <code>&lt;body&gt;</code>:</p>
+            <div class="code-controls">
+                <button onclick="copyCode(this)">Copy Code</button>
+            </div>
+            <pre>&lt;script src="https://api.mahdiyasser.site/gallery/v2/gallery.js"&gt;&lt;/script&gt;</pre>
+        </div>
+
+        <hr>
+
+        <h2>🎯 1. Basic Usage</h2>
+        <p>The simplest way to create a gallery with auto-detected theme:</p>
+        
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('basic-code')">Toggle Code</button>
+                <button onclick="copyCode(this, 'basic-code')">Copy Code</button>
+            </div>
+            <div id="basic-code" class="collapsible-content active">
+                <h4>Example: Basic Auto-Theme Gallery</h4>
+                <pre>&lt;div class="vetrom-gallery-auto" id="gallery1"&gt;
+    &lt;img src="./image1.png" alt="Slide 1"&gt;
+    &lt;img src="./image2.png" alt="Slide 2"&gt;
+    &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo:</h3>
+        <div class="vetrom-gallery-auto" id="gallery1">
+            <img src="./image1.png" alt="Slide 1">
+            <img src="./image2.png" alt="Slide 2">
+            <video src="./test.mp4" controls></video>
+        </div>
+
+        <hr>
+
+        <h2>🎨 2. Theme Customization</h2>
+        <p>V2 introduces powerful theming with the new class format:</p>
+        <p><code>vetrom-gallery-{theme}-{color}</code></p>
+        
+        <h3>Available Themes:</h3>
+        <ul>
+            <li><strong>auto</strong> - Automatically detects page background (default)</li>
+            <li><strong>dark</strong> - Force dark theme</li>
+            <li><strong>light</strong> - Force light theme</li>
+        </ul>
+
+        <h3>Color Options:</h3>
+        <ul>
+            <li><strong>Named colors:</strong> red, blue, green, purple, orange, pink, etc.</li>
+            <li><strong>Hex values:</strong> #FF5733, #3498db</li>
+            <li><strong>RGB:</strong> rgb(255,87,51)</li>
+            <li><strong>RGBA:</strong> rgba(52,152,219,0.8)</li>
+        </ul>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('theme-examples')">Toggle Code</button>
+                <button onclick="copyCode(this, 'theme-examples')">Copy Code</button>
+            </div>
+            <div id="theme-examples" class="collapsible-content active">
+                <h4>Theme Examples:</h4>
+                <pre>&lt;!-- Dark theme with blue accent --&gt;
+&lt;div class="vetrom-gallery-dark-blue" id="gallery2"&gt;
+    &lt;img src="./image3.png"&gt;
+    &lt;img src="./image4.png"&gt;
+&lt;/div&gt;
+
+&lt;!-- Light theme with custom hex color --&gt;
+&lt;div class="vetrom-gallery-light-#FF5733" id="gallery3"&gt;
+    &lt;img src="./image5.png"&gt;
+    &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+&lt;/div&gt;
+
+&lt;!-- Auto theme with RGB color --&gt;
+&lt;div class="vetrom-gallery-auto-rgb(52,152,219)" id="gallery4"&gt;
+    &lt;img src="./image6.png"&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo - Dark Blue Theme:</h3>
+        <div class="theme-demo" style="background: #1a1a1a;">
+            <div class="vetrom-gallery-dark-blue" id="gallery2">
+                <img src="./image3.png" alt="Slide 3">
+                <img src="./image4.png" alt="Slide 4">
+                <video src="./test.mp4" controls></video>
+            </div>
+        </div>
+
+        <h3>Live Demo - Light Red Theme:</h3>
+        <div class="theme-demo" style="background: #ffffff;">
+            <div class="vetrom-gallery-light-red" id="gallery3">
+                <img src="./image5.png" alt="Slide 5">
+                <img src="./image6.png" alt="Slide 6">
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>🎬 3. Video Support in Lightbox (NEW!)</h2>
+        <p>V2 now includes <strong>full video support</strong> in the lightbox with native controls!</p>
+
+        <div class="warning">
+            <p><strong>🎥 Important:</strong> Videos in the lightbox will play with native HTML5 controls. Click on images to open lightbox, videos can be played both in carousel and lightbox.</p>
+        </div>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('video-code')">Toggle Code</button>
+                <button onclick="copyCode(this, 'video-code')">Copy Code</button>
+            </div>
+            <div id="video-code" class="collapsible-content active">
+                <h4>Example: Mixed Media with Video</h4>
+                <pre>&lt;div class="vetrom-gallery-auto-purple" id="gallery-video"&gt;
+    &lt;img src="./image1.png"&gt;
+    &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+    &lt;img src="./image2.png"&gt;
+    &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo:</h3>
+        <div class="vetrom-gallery-auto-purple" id="gallery-video">
+            <img src="./image1.png" alt="Image 1">
+            <video src="./test.mp4" controls></video>
+            <img src="./image2.png" alt="Image 2">
+            <video src="./test.mp4" controls></video>
+        </div>
+
+        <hr>
+
+        <h2>🔄 4. RTL (Right-to-Left) Support (NEW!)</h2>
+        <p>V2 automatically detects RTL direction and adjusts navigation accordingly!</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('rtl-code')">Toggle Code</button>
+                <button onclick="copyCode(this, 'rtl-code')">Copy Code</button>
+            </div>
+            <div id="rtl-code" class="collapsible-content active">
+                <h4>Example: RTL Gallery (Arabic/Hebrew Pages)</h4>
+                <pre>&lt;div dir="rtl"&gt;
+    &lt;div class="vetrom-gallery-auto-green" id="gallery-rtl"&gt;
+        &lt;img src="./image1.png"&gt;
+        &lt;img src="./image2.png"&gt;
+        &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo (RTL):</h3>
+        <div class="rtl-demo">
+            <p style="text-align: center; font-weight: bold;">معرض الصور (RTL Gallery)</p>
+            <div class="vetrom-gallery-auto-orange" id="gallery-rtl">
+                <img src="./image3.png" alt="صورة 1">
+                <img src="./image4.png" alt="صورة 2">
+                <video src="./test.mp4" controls></video>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>⚡ 5. Dynamic Content Support (NEW!)</h2>
+        <p>V2 uses a MutationObserver to watch the DOM 24/7. Galleries added dynamically will automatically initialize!</p>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('dynamic-code')">Toggle Code</button>
+                <button onclick="copyCode(this, 'dynamic-code')">Copy Code</button>
+            </div>
+            <div id="dynamic-code" class="collapsible-content active">
+                <h4>Example: Add Gallery Dynamically</h4>
+                <pre>&lt;button onclick="addGallery()"&gt;Add Gallery Dynamically&lt;/button&gt;
+&lt;div id="dynamic-container"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+function addGallery() {
+    const container = document.getElementById('dynamic-container');
+    const gallery = document.createElement('div');
+    gallery.className = 'vetrom-gallery-dark-cyan';
+    gallery.id = 'dynamic-gallery-' + Date.now();
+    gallery.innerHTML = `
+        &lt;img src="./image5.png"&gt;
+        &lt;img src="./image6.png"&gt;
+        &lt;video src="./test.mp4" controls&gt;&lt;/video&gt;
+    `;
+    container.appendChild(gallery);
+}
+&lt;/script&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo:</h3>
+        <button onclick="addGallery()" style="padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px;">Add Gallery Dynamically</button>
+        <div id="dynamic-container"></div>
+
+        <hr>
+
+        <h2>🎭 6. Integration with Vetrom Player</h2>
+        <p>Combine Gallery with Vetrom Player for premium video experience:</p>
+
+        <div class="note">
+            <p><strong>Note:</strong> Include player.js for this feature:</p>
+            <pre style="margin-top: 10px;">&lt;script src="https://api.mahdiyasser.site/player/v2/player.js"&gt;&lt;/script&gt;</pre>
+        </div>
+
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('player-code')">Toggle Code</button>
+                <button onclick="copyCode(this, 'player-code')">Copy Code</button>
+            </div>
+            <div id="player-code" class="collapsible-content active">
+                <h4>Example: Gallery with Vetrom Player</h4>
+                <pre>&lt;div class="vetrom-gallery-auto-brown" id="gallery-player"&gt;
+    &lt;img src="./image1.png"&gt;
+    &lt;video src="./test.mp4" class="vetrom-media-auto-brown"&gt;&lt;/video&gt;
+    &lt;img src="./image2.png"&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <h3>Live Demo:</h3>
+        <div class="vetrom-gallery-auto-brown" id="gallery-player">
+            <img src="./image1.png" alt="Image">
+            <video src="./test.mp4" class="vetrom-media-auto-brown"></video>
+            <img src="./image2.png" alt="Image">
+        </div>
+
+        <hr>
+
+        <h2>📚 7. All Possible Scenarios</h2>
+        
+        <div class="code-section">
+            <div class="code-controls">
+                <button onclick="toggleCode('all-scenarios')">Toggle Code</button>
+                <button onclick="copyCode(this, 'all-scenarios')">Copy Code</button>
+            </div>
+            <div id="all-scenarios" class="collapsible-content">
+                <h4>Complete Scenario Examples:</h4>
+                <pre>&lt;!-- 1. Auto theme, no color specified (uses page background detection) --&gt;
+&lt;div class="vetrom-gallery-auto" id="auto1"&gt;...&lt;/div&gt;
+
+&lt;!-- 2. Dark theme with named color --&gt;
+&lt;div class="vetrom-gallery-dark-red" id="dark1"&gt;...&lt;/div&gt;
+
+&lt;!-- 3. Light theme with hex color --&gt;
+&lt;div class="vetrom-gallery-light-#3498db" id="light1"&gt;...&lt;/div&gt;
+
+&lt;!-- 4. Auto theme with RGB --&gt;
+&lt;div class="vetrom-gallery-auto-rgb(255,87,51)" id="auto2"&gt;...&lt;/div&gt;
+
+&lt;!-- 5. Dark theme with RGBA --&gt;
+&lt;div class="vetrom-gallery-dark-rgba(52,152,219,0.8)" id="dark2"&gt;...&lt;/div&gt;
+
+&lt;!-- 6. RTL gallery --&gt;
+&lt;div dir="rtl"&gt;
+    &lt;div class="vetrom-gallery-auto-green" id="rtl1"&gt;...&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- 7. Only images --&gt;
+&lt;div class="vetrom-gallery-light-blue" id="images-only"&gt;
+    &lt;img src="1.jpg"&gt;
+    &lt;img src="2.jpg"&gt;
+    &lt;img src="3.jpg"&gt;
+&lt;/div&gt;
+
+&lt;!-- 8. Only videos --&gt;
+&lt;div class="vetrom-gallery-dark-purple" id="videos-only"&gt;
+    &lt;video src="1.mp4"&gt;&lt;/video&gt;
+    &lt;video src="2.mp4"&gt;&lt;/video&gt;
+&lt;/div&gt;
+
+&lt;!-- 9. Mixed with Vetrom Player --&gt;
+&lt;div class="vetrom-gallery-auto-orange" id="mixed"&gt;
+    &lt;img src="1.jpg"&gt;
+    &lt;video src="1.mp4" class="vetrom-media-auto-orange"&gt;&lt;/video&gt;
+    &lt;img src="2.jpg"&gt;
+&lt;/div&gt;
+
+&lt;!-- 10. Single image gallery --&gt;
+&lt;div class="vetrom-gallery-light-pink" id="single"&gt;
+    &lt;img src="single.jpg"&gt;
+&lt;/div&gt;</pre>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>✅ Quick Start Guide</h2>
+        <ol style="line-height: 2;">
+            <li><strong>Include the script:</strong> Add <code>&lt;script src="https://api.mahdiyasser.site/gallery/v2/gallery.js"&gt;&lt;/script&gt;</code></li>
+            <li><strong>Choose your theme:</strong> <code>vetrom-gallery-{auto|dark|light}</code></li>
+            <li><strong>Add color (optional):</strong> <code>vetrom-gallery-auto-blue</code></li>
+            <li><strong>Add your media:</strong> Place <code>&lt;img&gt;</code> and <code>&lt;video&gt;</code> inside</li>
+            <li><strong>Give it an ID:</strong> <code>id="my-gallery"</code> for identification</li>
+        </ol>
+
+        <div class="note">
+            <p><strong>💡 Pro Tips:</strong></p>
+            <ul>
+                <li>Always use unique IDs for each gallery</li>
+                <li>Videos in lightbox have native controls - they pause when switching slides</li>
+                <li>RTL is auto-detected from parent elements</li>
+                <li>Dynamic galleries initialize automatically</li>
+                <li>Use <code>auto</code> theme for best compatibility</li>
+            </ul>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p style="text-align: center; color: #6c757d; font-size: 0.85em;">
+                Vetrom Gallery V2 © 2025 Mahdi Yasser. Licensed under the MIT License.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleCode(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.classList.toggle('active');
+            }
+        }
+
+        function copyCode(button, containerId = null) {
+            let pre;
+            let container;
+            
+            if (containerId) {
+                container = document.getElementById(containerId);
+            } else {
+                container = button.closest('.code-section') || button.closest('.note') || button.closest('li') || button.closest('.container');
+            }
+
+            if (button.closest('.note') && container.querySelector('pre')) {
+                pre = container.querySelector('pre');
+            } else if (button.closest('li') && container.querySelector('pre')) {
+                pre = container.querySelector('pre');
+            } else if (container) {
+                const collapsibleContent = button.closest('.code-controls').nextElementSibling;
+                if (collapsibleContent) {
+                    pre = collapsibleContent.querySelector('pre');
+                }
+            }
+
+            if (!pre) {
+                console.error("Could not find code block to copy.");
+                return;
+            }
+
+            performCopy(pre.innerText.trim(), button);
+        }
+
+        function performCopy(codeText, button) {
+            const originalText = button.textContent;
+            button.textContent = 'Copying...';
+            
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(codeText).then(() => {
+                    showCopySuccess(button, originalText);
+                }).catch(err => {
+                    if (fallbackCopy(codeText)) {
+                        showCopySuccess(button, originalText);
+                    } else {
+                        button.textContent = originalText;
+                        alert('Copy failed. Please copy manually.');
+                    }
+                });
+            } else {
+                if (fallbackCopy(codeText)) {
+                    showCopySuccess(button, originalText);
+                } else {
+                    button.textContent = originalText;
+                    alert('Copy failed. Please copy manually.');
+                }
+            }
+        }
+
+        function fallbackCopy(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text;
+            tempTextArea.style.position = 'fixed'; 
+            tempTextArea.style.left = '-9999px';
+            document.body.appendChild(tempTextArea);
+            
+            let successful = false;
+            try {
+                tempTextArea.select();
+                document.execCommand('copy');
+                successful = true;
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+            return successful;
+        }
+
+        function showCopySuccess(button, originalText) {
+            button.textContent = 'Copied!';
+            button.classList.add('copied');
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 1500);
+        }
+
+        function addGallery() {
+            const container = document.getElementById('dynamic-container');
+            const gallery = document.createElement('div');
+            gallery.className = 'vetrom-gallery-dark-cyan';
+            gallery.id = 'dynamic-gallery-' + Date.now();
+            gallery.innerHTML = `
+                <img src="./image5.png" alt="Dynamic 1">
+                <img src="./image6.png" alt="Dynamic 2">
+                <video src="./test.mp4" controls></video>
+            `;
+            container.appendChild(gallery);
+        }
+    </script>
+</body>
+</html>
